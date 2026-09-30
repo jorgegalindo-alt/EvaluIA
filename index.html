@@ -41,8 +41,8 @@
   <!-- Main Content -->
   <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-    <!-- Sidebar / Selection Panel -->
-    <aside class="lg:col-span-4 space-y-6 no-print">
+    <!-- Sidebar / Panel de Selección -->
+    <aside class="lg:col-span-4 space-y-5 no-print">
       
       <!-- Paso 1: Selección de Estrategia -->
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
@@ -55,7 +55,7 @@
         </select>
         <p class="text-xs text-slate-500 mt-2 flex items-center gap-1">
           <i data-lucide="layers" class="w-3.5 h-3.5 text-slate-400"></i>
-          Filtra la lista de productos pedagógicos compatibles.
+          Muestra los productos asociados a la estrategia seleccionada.
         </p>
       </div>
 
@@ -72,32 +72,32 @@
         <!-- Buscador interno -->
         <div class="relative mb-3">
           <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
-          <input type="text" id="search-input" oninput="filterProducts()" placeholder="Buscar producto o código (ej: P1, informe)..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500">
+          <input type="text" id="search-input" oninput="filterProducts()" placeholder="Buscar producto o código (ej: P1, P4, prensa)..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500">
         </div>
 
         <!-- Lista de productos -->
-        <div id="products-list" class="space-y-2 max-h-[420px] overflow-y-auto pr-1">
+        <div id="products-list" class="space-y-2 max-h-[460px] overflow-y-auto pr-1">
           <!-- Populated by JS -->
         </div>
       </div>
 
     </aside>
 
-    <!-- Detailed View Panel -->
+    <!-- Vista de Detalle -->
     <section class="lg:col-span-8 space-y-6">
       
       <div id="printable-area" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8 min-h-[600px] relative">
         
-        <!-- Placeholder / Empty State -->
+        <!-- Placeholder / Estado vacío -->
         <div id="empty-state" class="flex flex-col items-center justify-center h-full py-20 text-center">
           <div class="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mb-4">
             <i data-lucide="file-search" class="w-8 h-8"></i>
           </div>
           <h3 class="text-lg font-semibold text-slate-700 mb-1">Ningún producto seleccionado</h3>
-          <p class="text-sm text-slate-500 max-w-sm">Seleccione una estrategia metodológica y elija un producto académico de la lista izquierda para desplegar su matriz de evaluación.</p>
+          <p class="text-sm text-slate-500 max-w-sm">Seleccione una estrategia metodológica y elija un producto de la lista izquierda para desplegar la información completa de la matriz.</p>
         </div>
 
-        <!-- Content Area -->
+        <!-- Área de Contenido -->
         <div id="product-detail" class="hidden space-y-6">
           
           <!-- Encabezado Ficha -->
@@ -108,7 +108,7 @@
                 <span id="detail-badge" class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">Producto Directo</span>
               </div>
               <div class="flex items-center space-x-2 no-print">
-                <button onclick="copyContent()" class="p-2 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors" title="Copiar resumen al portapapeles">
+                <button onclick="copyContent()" class="p-2 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors" title="Copiar ficha completa al portapapeles">
                   <i data-lucide="copy" class="w-4 h-4"></i> Copiar Ficha
                 </button>
                 <button onclick="window.print()" class="p-2 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors" title="Imprimir o guardar PDF">
@@ -116,111 +116,72 @@
                 </button>
               </div>
             </div>
-            <h2 id="detail-title" class="text-2xl font-bold text-slate-900">Vídeo expositivo de presentación del caso</h2>
+            <h2 id="detail-title" class="text-2xl font-bold text-slate-900">P1. Vídeo expositivo de presentación del caso</h2>
             <p id="detail-strategy" class="text-xs font-medium text-slate-500 mt-1 flex items-center gap-1">
-              <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Estrategia: <span class="text-slate-800 font-semibold">Aprendizaje basado en casos</span>
+              <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Estrategia activa: <span class="text-slate-800 font-semibold">Aprendizaje basado en casos</span>
             </p>
           </div>
 
-          <!-- Columna 3: Articulación con otros productos -->
-          <div class="bg-amber-50/70 border border-amber-200 rounded-lg p-4">
-            <h4 class="text-xs font-bold text-amber-900 uppercase tracking-wide flex items-center gap-1.5 mb-2">
-              <i data-lucide="git-fork" class="w-4 h-4 text-amber-600"></i>
-              Articulación con otros productos académicos
-            </h4>
-            <p id="detail-articulation-text" class="text-xs text-amber-900/80 mb-3 leading-relaxed">
-              Para el diseño de las actividades que conducen a este producto, el docente puede apoyarse en los siguientes productos relacionados:
-            </p>
-            <div id="articulation-pills" class="flex flex-wrap gap-2">
-              <!-- Pills generated by JS -->
-            </div>
-            <p class="text-[11px] text-amber-700/80 italic mt-3 border-t border-amber-200/60 pt-2">
-              * Nota: Cada producto articulado puede seleccionarse individualmente para consultar su rúbrica parametrizada.
-            </p>
-          </div>
-
-          <!-- Columna 4: Estructura (Parametrización académica) -->
+          <!-- Estructura -->
           <div class="space-y-2">
             <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
               <i data-lucide="layout-list" class="w-4 h-4 text-indigo-600"></i>
-              Estructura (Parametrización académica del entregable en la Guía)
+              Estructura (Se sugiere incluirla en la guía de aprendizaje en los pasos)
             </h3>
-            <div id="detail-structure" class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-lg border border-slate-200 whitespace-pre-line">
+            <div id="detail-structure" class="text-xs text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-lg border border-slate-200 whitespace-pre-line">
               <!-- Content -->
             </div>
           </div>
 
-          <!-- Columna 5: Formato y Soporte Tecnológico -->
+          <!-- Formato -->
           <div class="space-y-2">
             <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
               <i data-lucide="laptop" class="w-4 h-4 text-indigo-600"></i>
-              Formato (Soporte Tecnológico Requerido)
+              Formato (Se sugiere incluirlo en la guía de aprendizaje en los pasos)
             </h3>
-            <div id="detail-format" class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-lg border border-slate-200 whitespace-pre-line">
+            <div id="detail-format" class="text-xs text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-lg border border-slate-200 whitespace-pre-line">
               <!-- Content -->
             </div>
           </div>
 
-          <!-- Criterios de Evaluación y Rúbricas (Columnas 6 a 11) -->
+          <!-- Criterios de Evaluación y Rúbricas Moodle -->
           <div class="pt-4 border-t border-slate-200 space-y-6">
             <h3 class="text-base font-bold text-indigo-950 flex items-center gap-2">
               <i data-lucide="check-square" class="w-5 h-5 text-indigo-600"></i>
-              Criterios de Evaluación y Niveles de Rúbrica (Moodle)
+              Criterios de Evaluación y Rúbricas (Moodle)
             </h3>
 
-            <!-- Criterio 1: De Forma -->
+            <!-- Criterio 1: Forma -->
             <div class="border border-slate-200 rounded-lg overflow-hidden">
               <div class="bg-indigo-50 border-b border-indigo-100 px-4 py-2.5 flex items-center justify-between">
                 <span class="text-xs font-bold uppercase tracking-wider text-indigo-900 flex items-center gap-2">
                   <i data-lucide="file-text" class="w-4 h-4 text-indigo-600"></i>
-                  Primer Criterio: Forma
+                  Características Primer Criterio de Evaluación (De Forma)
                 </span>
-                <span class="text-[11px] bg-white text-indigo-800 px-2 py-0.5 rounded border border-indigo-200 font-semibold">Calificación Avanzada</span>
+                <span class="text-[11px] bg-white text-indigo-800 px-2 py-0.5 rounded border border-indigo-200 font-semibold">Rúbrica Moodle</span>
               </div>
               <div class="p-4 space-y-3">
-                <p id="c1-desc" class="text-xs text-slate-600 italic leading-relaxed"></p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
-                  <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-lg">
-                    <span class="text-[11px] font-bold text-emerald-800 block mb-1">Nivel Alto</span>
-                    <p id="c1-alto" class="text-xs text-slate-700"></p>
-                  </div>
-                  <div class="bg-amber-50 border border-amber-200 p-3 rounded-lg">
-                    <span class="text-[11px] font-bold text-amber-800 block mb-1">Nivel Medio</span>
-                    <p id="c1-medio" class="text-xs text-slate-700"></p>
-                  </div>
-                  <div class="bg-rose-50 border border-rose-200 p-3 rounded-lg">
-                    <span class="text-[11px] font-bold text-rose-800 block mb-1">Nivel Bajo</span>
-                    <p id="c1-bajo" class="text-xs text-slate-700"></p>
-                  </div>
-                </div>
+                <div id="c1-desc" class="text-xs text-slate-700 leading-relaxed whitespace-pre-line bg-slate-50 p-3 rounded border border-slate-200"></div>
+                
+                <h5 class="text-xs font-bold text-slate-800 pt-1">Niveles Primer Criterio (De Forma)</h5>
+                <div id="c1-niveles" class="text-xs text-slate-700 leading-relaxed bg-emerald-50/60 border border-emerald-200 p-3.5 rounded-lg whitespace-pre-line"></div>
               </div>
             </div>
 
-            <!-- Criterio 2: De Contenido -->
+            <!-- Criterio 2: Contenido -->
             <div class="border border-slate-200 rounded-lg overflow-hidden">
               <div class="bg-indigo-50 border-b border-indigo-100 px-4 py-2.5 flex items-center justify-between">
                 <span class="text-xs font-bold uppercase tracking-wider text-indigo-900 flex items-center gap-2">
                   <i data-lucide="align-left" class="w-4 h-4 text-indigo-600"></i>
-                  Segundo Criterio: Contenido
+                  Características Segundo Criterio de Evaluación (De Contenido)
                 </span>
-                <span class="text-[11px] bg-white text-indigo-800 px-2 py-0.5 rounded border border-indigo-200 font-semibold">Calificación Avanzada</span>
+                <span class="text-[11px] bg-white text-indigo-800 px-2 py-0.5 rounded border border-indigo-200 font-semibold">Rúbrica Moodle</span>
               </div>
               <div class="p-4 space-y-3">
-                <p id="c2-desc" class="text-xs text-slate-600 italic leading-relaxed"></p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
-                  <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-lg">
-                    <span class="text-[11px] font-bold text-emerald-800 block mb-1">Nivel Alto</span>
-                    <p id="c2-alto" class="text-xs text-slate-700"></p>
-                  </div>
-                  <div class="bg-amber-50 border border-amber-200 p-3 rounded-lg">
-                    <span class="text-[11px] font-bold text-amber-800 block mb-1">Nivel Medio</span>
-                    <p id="c2-medio" class="text-xs text-slate-700"></p>
-                  </div>
-                  <div class="bg-rose-50 border border-rose-200 p-3 rounded-lg">
-                    <span class="text-[11px] font-bold text-rose-800 block mb-1">Nivel Bajo</span>
-                    <p id="c2-bajo" class="text-xs text-slate-700"></p>
-                  </div>
-                </div>
+                <div id="c2-desc" class="text-xs text-slate-700 leading-relaxed whitespace-pre-line bg-slate-50 p-3 rounded border border-slate-200"></div>
+                
+                <h5 class="text-xs font-bold text-slate-800 pt-1">Niveles Segundo Criterio (De Contenido)</h5>
+                <div id="c2-niveles" class="text-xs text-slate-700 leading-relaxed bg-emerald-50/60 border border-emerald-200 p-3.5 rounded-lg whitespace-pre-line"></div>
               </div>
             </div>
 
@@ -229,11 +190,11 @@
               <div class="bg-slate-100 border-b border-slate-200 px-4 py-2.5">
                 <span class="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
                   <i data-lucide="shield-check" class="w-4 h-4 text-slate-600"></i>
-                  Tercer Criterio: Calidad Académica
+                  Características Tercer Criterio de Evaluación (De Calidad Académica)
                 </span>
               </div>
               <div class="p-4">
-                <p id="c3-desc" class="text-xs text-slate-700 leading-relaxed"></p>
+                <div id="c3-desc" class="text-xs text-slate-700 leading-relaxed whitespace-pre-line"></div>
               </div>
             </div>
 
@@ -247,9 +208,7 @@
 
   </main>
 
-  <!-- Script Data & Logic -->
   <script>
-    // Datos completos extraídos de la Matriz EvaluIA
     const STRATEGIES = [
       "Todas las estrategias",
       "Aprendizaje basado en casos",
@@ -261,91 +220,378 @@
       "Aprendizaje Basado en Investigación (ABI)"
     ];
 
+    // Datos transcritos íNTEGRAMENTE desde la matriz de Google Sheets para todos los campos[cite: 1]
     const PRODUCTS = [
       {
         id: "P1",
-        title: "P1. Vídeo expositivo de presentación del caso",
+        title: "P1. Vídeo expositivo de presentación del caso 1.1. Oral 1.2. Multimedia",
         strategies: [
           "Aprendizaje basado en casos",
-          "Aprendizaje basado en tareas",
           "Aprendizaje basado en escenarios",
-          "Aprendizaje basado en proyectos",
-          "Aprendizaje basado en problemas (ABP)"
+          "Aprendizaje basado en problemas (ABP)",
+          "Aprendizaje Basado en Retos (ABR)",
+          "Aprendizaje Basado en Investigación (ABI)"
         ],
-        articulationText: "Para el diseño de las actividades que conducen a este producto (video expositivo de presentación del caso), el docente puede apoyarse en los siguientes productos:",
-        articulatedCodes: ["P2", "P3", "P4"],
-        structure: "1. Introducción: Presentación del caso: título, contexto general y relevancia. Objetivo de la exposición: qué se pretende mostrar o resolver. Justificación: por qué se eligió el caso y su importancia académica o profesional.\n2. Descripción del caso: Contexto específico: lugar, tiempo, actores involucrados. Situación problemática: hechos clave, conflicto o dilema central. Datos relevantes.\n3. Análisis preliminar del caso: Identificación del problema principal. Causas y consecuencias. Perspectiva teórica. Valoración crítica (FODA).\n4. Alternativas de solución y Criterios de evaluación.\n5. Propuesta de solución: Solución elegida, plan de acción, impacto esperado.\n6. Conclusiones y Preguntas de discusión.\n7. Referencias bibliográficas (Normas APA).",
-        format: "• Archivo en formato MP4 (exportado desde PowerPoint).\n• Duración máxima: 10 minutos.\n• Peso máximo: 200 MB.\n• Las tablas o cuadros comparativos deben diseñarse directamente en formato editable; no se admiten imágenes, capturas ni URLs externas.",
-        c1Desc: "Esta rúbrica orienta la valoración de la presentación formal del video expositivo, considerando la estructura de secciones, claridad y fluidez del discurso, tiempo e indicaciones técnicas.",
-        c1Alto: "Cumple con las 8 secciones completas (Introducción, Descripción, Análisis, Alternativas, Propuesta, Conclusiones, Discusión, Referencias APA).",
-        c1Medio: "Cumple con la mayoría de las secciones pero omite análisis preliminar detallado o preguntas de discusión.",
-        c1Bajo: "Estructura incompleta, sólo presenta introducción básica, caso general y conclusiones sin referencias adecuadas.",
-        c2Desc: "Esta rúbrica orienta la valoración del contenido académico, precisión en la presentación del caso, coherencia del análisis y pertinencia de las alternativas planteadas.",
-        c2Alto: "Claridad en objetivos, alta precisión y síntesis, análisis profundo sustentado con perspectiva teórica y soluciones altamente pertinentes.",
-        c2Medio: "Claridad en objetivos pero falta precisión en la síntesis del caso. Análisis preliminar crítico pero carente de sustentación teórica sólida.",
-        c2Bajo: "Falta de claridad en objetivos, análisis superficial sin estructuras argumentativas ni pertinencia contextual.",
-        c3Desc: "Se espera un estándar de calidad acorde con el nivel académico del curso. El evaluador revisará dominio conceptual, uso pertinente de fuentes confiables, coherencia y profundidad argumentativa y rigor en atribución de fuentes."
+        structure: `1. Introducción: Presentación del caso: título, contexto general y relevancia. Objetivo de la exposición: qué se pretende mostrar o resolver. Justificación: por qué se eligió el caso y su importancia académica o profesional.
+2. Descripción del caso: Contexto específico: lugar, tiempo, actores involucrados. Situación problemática: hechos clave, conflicto o dilema central. Datos relevantes: cifras, testimonios, documentos, etc.
+3. Análisis preliminar del caso: Identificación del problema principal. Causas y consecuencias. Perspectiva teórica: aplicación de conceptos, teorías o modelos. Valoración crítica: fortalezas, debilidades, oportunidades y amenazas (puede incluir un FODA).
+4. Alternativas de solución: Opciones posibles: con sus ventajas y desventajas. Criterios de evaluación: cómo se comparan las alternativas.
+5. Propuesta de solución: Solución elegida: argumentación y sustentación. Plan de acción: pasos, recursos, responsables y cronograma. Impacto esperado: beneficios, riesgos y sostenibilidad.
+6. Conclusiones: Síntesis del aprendizaje. Reflexión personal o grupal. Recomendaciones futuras.
+7. Preguntas y discusión: Motivación del interés y proyección de futuras indagaciones.
+8. Referencias: Fuentes bibliográficas, documentales o testimoniales utilizadas.`,
+        format: `Formato (soporte):
+
+• Archivo en formato MP4, generado a partir de una presentación en PowerPoint (presentación exportada a video MP4).
+
+Tecnológico:
+
+• Duración máxima: 10 minutos.
+• Peso máximo del archivo: 200 MB.
+• Las tablas o cuadros comparativos deben diseñarse e incrustarse directamente en el archivo en formato editable; no se admite la inserción de tablas provenientes de hojas de cálculo externas, el uso de capturas de pantalla o imágenes. Tampoco se permite enlazar direcciones URL externas ni vínculos a repositorios en la nube.`,
+        c1Desc: `Se espera que el video expositivo de presentación del caso tenga un estándar de calidad acorde con el nivel académico del curso (técnico, pregrado, posgrado, etc.) y con las problemáticas que el estudiante debería poder plantear y abordar, para el desarrollo de habilidades en un grado cognitivo asociado las siguiente categorías: memorización, comprensión, aplicación, análisis, síntesis o evaluación.
+
+
+Descripción para evaluadores
+
+
+Este criterio orienta la valoración de la calidad académica del producto correspondiente a esta actividad. El evaluador debe revisar en qué medida el trabajo evidencia dominio conceptual, uso pertinente de fuentes confiables, coherencia y profundidad de la argumentación, originalidad en los aportes y respeto por la integridad académica, reflejado en la adecuada atribución de las fuentes y el uso responsable de la información, de acuerdo con los niveles de desempeño y rangos de puntaje definidos para este criterio en la rúbrica de la actividad.`,
+        c1Niveles: `Nivel alto: El video expositivo cuenta con:
+1) Introducción: presentación del caso elegido, objetivo de la exposición, justificación del caso elegido.
+2) Descripción del caso: contexto específico, situación problemática, datos relevantes.
+3) Análisis preliminar del caso: identificación del problema principal, causas y consecuencias, perspectiva teórica de abordaje, valoración crítica.
+4) Alternativas de solución: posibles opciones de respuesta a la situación problemática, criterios de evaluación de estas opciones.
+5) Propuesta de solución: solución elegida, posible plan de acción, impacto esperado.
+6) Conclusiones: síntesis de los aprendido, reflexión personal (o grupal), recomendaciones.
+7) Preguntas para discusión: preguntas que motiven reflexión.
+8) Referencias: uso de Normas APA. 
+
+Nivel medio: El video expositivo cuenta con:
+1) Introducción: presentación del caso elegido, objetivo de la exposición.
+2) Descripción del caso: contexto específico, situación problemática.
+3) Análisis preliminar del caso: identificación del problema principal, causas y consecuencias.
+4) Alternativas de solución: posibles opciones de respuesta a la situación problemática.
+5) Propuesta de solución: solución elegida, posible plan de acción.
+6) Conclusiones: reflexión personal (o grupal), recomendaciones.
+7) Referencias: uso de Normas APA.
+
+Nivel bajo: El video expositivo cuenta con:
+1) Introducción: presentación del caso elegido.
+2) Descripción del caso: contexto específico.
+3) Análisis preliminar del caso: identificación del problema principal.
+4) Conclusiones: reflexión personal (o grupal), recomendaciones.
+5) Referencias: uso de Normas APA.
+
+
+Descripción para evaluadores  
+
+Esta rúbrica orienta la valoración de la presentación formal del video expositivo, considerando la estructura y orden de las secciones, la claridad y fluidez del discurso oral, el uso adecuado del tiempo asignado y el cumplimiento de las indicaciones técnicas sobre formato, duración y calidad básica del recurso audiovisual.`,
+        c2Desc: `Se espera que el video expositivo de presentación del caso responda una finalidad puntual, en el marco de la disciplina o campo propio del curso. Podría hacerse énfasis en alguno de los siguientes aspectos: 1) Claridad en objetivo y justificación de la exposición, 2) Precisión y profundidad en la descripción y análisis preliminar del caso, 3) o pertinecia de las alternativas, propuestas y conclusiones
+
+Descripción para evaluadores
+
+
+Este criterio orienta la valoración de la calidad académica del producto correspondiente a esta actividad. El evaluador debe revisar en qué medida el trabajo evidencia dominio conceptual, uso pertinente de fuentes confiables, coherencia y profundidad de la argumentación, originalidad en los aportes y respeto por la integridad académica, reflejado en la adecuada atribución de las fuentes y el uso responsable de la información, de acuerdo con los niveles de desempeño y rangos de puntaje definidos para este criterio en la rúbrica de la actividad..`,
+        c2Niveles: `Nivel alto: El contenido del video expositivo cumple con condiciones de:
+1) Claridad en la presentación del objetivo de la exposición y del caso elegido, y de la justificación del caso elegido.
+2) Precisión y capacidad de síntesis en la descripcíon del caso y referencia a fuentes utilizadas.
+3) Análisis preliminar del caso: identificación del problema principal, causas y consecuencias, perspectiva teórica de abordaje, valoración crítica.
+4) Profundidad del análisis preliminar: expresión crítica y sustentada con respecto al caso seleccionado. Uso de estructuras argumentativas. 
+5) Pertinencia de propuesta y conclusiones: actualidad contextual e interés disciplinar de la propuesta de solución y conclusiones. 
+
+Nivel medio: El contenido del video expositivo cumple con condiciones de:
+1) Claridad en la presentación del objetivo de la exposición y del caso elegido, y de la justificación del caso elegido.
+2) Falta de precisión y capacidad de síntesis en la descripcíon del caso y referencia a fuentes utilizadas.
+3) Análisis preliminar del caso: identificación del problema principal, causas y consecuencias.
+4) Profundidad del análisis preliminar: expresión crítica, aunque carente de sustetación, con respecto al caso seleccionado. 
+5) Pertinencia de propuesta y conclusiones: actualidad contextual de la propuesta de solución y conclusiones.
+
+Nivel bajo: El contenido del video expositivo cumple con condiciones de:
+1) Falta de claridad en la presentación del objetivo de la exposición y del caso elegido, y de la justificación del caso elegido.
+2) Falta de precisión y capacidad de síntesis en la descripcíon del caso y referencia a fuentes utilizadas.
+3) Análisis preliminar del caso: identificación del problema principal.
+4) Falta de profundidad del análisis preliminar: carencia en el uso de estructuras argumentativas. 
+5) Propuesta y conclusiones sin pertinencia contextual e interés disciplinar.
+
+Descripción para evaluadores 
+
+Esta rúbrica orienta la valoración del contenido académico del video, teniendo en cuenta la precisión en la presentación del caso, la relevancia y claridad del problema planteado, la coherencia del análisis preliminar, la pertinencia de las alternativas y la propuesta de solución, así como la articulación con los resultados de aprendizaje y con los referentes teóricos propios del curso.`,
+        c3Desc: `Se espera que el video expositivo de presentación del caso tenga un estándar de calidad acorde con el nivel académico del curso (técnico, pregrado, posgrado, etc.) y con las problemáticas que el estudiante debería poder plantear y abordar, para el desarrollo de habilidades en un grado cognitivo asociado las siguiente categorías: memorización, comprensión, aplicación, análisis, síntesis o evaluación.
+
+
+Descripción para evaluadores
+
+
+Este criterio orienta la valoración de la calidad académica del producto correspondiente a esta actividad. El evaluador debe revisar en qué medida el trabajo evidencia dominio conceptual, uso pertinente de fuentes confiables, coherencia y profundidad de la argumentación, originalidad en los aportes y respeto por la integridad académica, reflejado en la adecuada atribución de las fuentes y el uso responsable de la información, de acuerdo con los niveles de desempeño y rangos de puntaje definidos para este tercer criterio en la rúbrica de la actividad.`
       },
       {
         id: "P2",
         title: "P2. Revisión de prensa",
-        strategies: ["Aprendizaje basado en casos"],
-        articulationText: "Para el diseño de las actividades que conducen a este producto (revisión de prensa), el docente puede articular su uso con los siguientes productos:",
-        articulatedCodes: ["P1", "P4", "P5", "P9", "P10"],
-        structure: "1. Portada: Título, fecha, autor/institución.\n2. Introducción: Breve explicación del objetivo, justificación, alcance temporal y geográfico.\n3. Metodología: Fuentes utilizadas (periódicos, portales digitales), criterios de selección y palabras clave.\n4. Resumen de noticias: Presentación cronológica o temática con síntesis de cada noticia.\n5. Breve análisis: Identificación de tendencias, enfoques, comparación entre medios e impacto social.\n6. Conclusiones: Hallazgos principales, selección del caso para estudio y justificación.\n7. Referencias de fuentes (Normas APA).",
-        format: "• Archivo en .docx (Word) o .pdf\n• Extensión sugerida: entre 3000 y 4000 palabras.\n• Tablas editables dentro del documento Word (no capturas de pantalla ni enlaces externos).",
-        c1Desc: "Esta rúbrica orienta la valoración de la presentación formal, organización y rotulación de secciones, extensión, formato de entrega y normas de citación.",
-        c1Alto: "Incluye las 7 secciones estructurales completas, excelente redacción y citación en Normas APA impecable.",
-        c1Medio: "Incluye la mayoría de las secciones pero omite la justificación del alcance metodológico o fallas menores en APA.",
-        c1Bajo: "Estructura incompleta, sin formato claro de secciones ni uso correcto de normas de citación.",
-        c2Desc: "Valora el contenido académico, pertinencia y diversidad de las fuentes periodísticas seleccionadas, síntesis y justificación crítica del caso elegido.",
-        c2Alto: "Fuentes diversas y altamente pertinentes, excelente síntesis cronológica y postura crítica fundamentada.",
-        c2Medio: "Fuentes pertinentes pero poco diversas. Análisis descriptivo sin suficiente contraste entre líneas editoriales.",
-        c2Bajo: "Fuentes no pertinentes o fuera de la ventana de tiempo. Sin enfoque crítico ni justificación disciplinar del caso.",
-        c3Desc: "Evaluación de la calidad académica, dominio conceptual, rigor en la recopilación documental y responsabilidad en la atribución de derechos de autor."
+        strategies: [
+          "Aprendizaje basado en casos",
+          "Aprendizaje basado en escenarios",
+          "Aprendizaje Basado en Investigación (ABI)"
+        ],
+        structure: `El producto entregable debe contar con:
+
+1. Portada: Título del documento. Fecha de elaboración. Autor o institución responsable. 
+2. Introducción: Breve explicación del objetivo de la revisión. Justificación del tema elegido. Alcance temporal y geográfico (por ejemplo, medios nacionales entre junio y julio de 2025). 
+3. Metodología: Fuentes utilizadas (periódicos, portales digitales, revistas, etc.): Criterios de selección de noticias. Palabras clave o temas centrales. 
+4. Resumen de noticias: Presentación cronológica o temática de las noticias más relevantes. Breve descripción de cada noticia (fecha, medio, titular, contenido principal). Puede incluir citas textuales breves o enlaces. 
+5. Breve análisis: Identificación de tendencias, enfoques o narrativas comunes. Comparación entre medios (cómo cada uno aborda el tema). Evaluación del impacto mediático o social. 
+6. Conclusiones: Principales hallazgos. Selección de posible caso para estudio. Justificación de selección de caso.
+7. Referencias de fuentes.`,
+        format: `Formato (soporte):
+
+• Archivo en.docx (Word)
+• Archivo en.pdf
+
+Tecnológico:
+
+• Extensión sugerida entre 3000 y 4000 palabras.
+• Las tablas o cuadros comparativos deben diseñarse e incrustarse directamente en el archivo en formato editable (Word), es decir, no como imagen, ni como captura de pantalla, ni como hoja de cálculo de Excel. Tampoco se permite enlazar direcciones URL externas ni vínculos a repositorios en la nube.`,
+        c1Desc: `Se espera que la revisión de prensa conduzca a la selección del caso y tenga un estándar de calidad acorde con el nivel académico del curso (técnico, pregrado, posgrado, etc.) y con las problemáticas que el estudiante debería poder plantear y abordar, para el desarrollo de habilidades en un grado cognitivo asociado las siguiente categorías: memorización, comprensión, aplicación, análisis, síntesis o evaluación.
+
+Descripción para evaluadores
+
+
+Este criterio orienta la valoración de la calidad académica del producto correspondiente a esta actividad. El evaluador debe revisar en qué medida el trabajo evidencia dominio conceptual, uso pertinente de fuentes confiables, coherencia y profundidad de la argumentación, originalidad en los aportes y respeto por la integridad académica, reflejado en la adecuada atribución de las fuentes y el uso responsable de la información, de acuerdo con los niveles de desempeño y rangos de puntaje definidos para este criterio en la rúbrica de la actividad.`,
+        c1Niveles: `Nivel alto: La revisión de prensa cuenta con:
+1) Portada: Título del documento. Fecha de elaboración. Autor o institución responsable.
+2) Introducción: Breve explicación del objetivo de la revisión. Justificación del tema elegido. Alcance temporal y geográfico. 
+3) Metodología: Fuentes utilizadas. Criterios de selección de noticias. Palabras clave o temas centrales. 
+4) Resumen de noticias: Presentación cronológica o temática de las noticias más relevantes. Breve descripción de cada noticia. Puede incluir citas textuales breves. 
+5) Breve análisis: Identificación de tendencias, enfoques o narrativas comunes. Comparación entre medios. 
+6) Conclusiones: Principales hallazgos. Selección de posible caso para estudio. Justificación de selección de caso.
+7) Referencias de fuentes: uso de Normas APA.
+
+
+Nivel medio: La revisión de prensa cuenta con:
+1) Portada: Título del documento. Fecha de elaboración. Autor o institución responsable.
+2) Introducción: Breve explicación del objetivo de la revisión. Alcance temporal y geográfico. 
+3) Metodología: Fuentes utilizadas. Palabras clave o temas centrales. 
+4) Resumen de noticias: Presentación cronológica o temática de las noticias más relevantes. Breve descripción de cada noticia. 
+5) Breve análisis: Identificación de tendencias, enfoques o narrativas comunes. 
+6) Conclusiones: Selección de posible caso para estudio. Justificación de selección de caso.
+7) Referencias de fuentes: uso de Normas APA.
+
+
+Nivel bajo: La revisión de prensa cuenta con:
+1) Portada: Título del documento. Fecha de elaboración. Autor o institución responsable.
+2) Introducción: Alcance temporal y geográfico. 
+3) Metodología: Fuentes utilizadas. 
+4) Resumen de noticias: Presentación cronológica o temática de las noticias más relevantes. Breve descripción de cada noticia.  
+5) Conclusiones: Selección de posible caso para estudio.
+7) Referencias de fuentes: uso de Normas APA.
+
+
+Primer criterio de evaluación 
+
+Esta rúbrica orienta la valoración de la presentación formal de la revisión de prensa, considerando la organización y rotulación de las secciones del documento (portada, introducción, metodología, resumen de noticias, análisis, conclusiones y referencias), el cumplimiento de la extensión y del formato de entrega establecidos (.docx o .pdf), así como la claridad y corrección básica de la redacción y el uso adecuado de las normas de citación.`,
+        c2Desc: `Se espera que la revisión de prensa se base en una selección de fuentes diversa, relevante, actual y pertienente al desarrollo de los contenidos asociados al resultado de aprendizaje; igualmente, los textos de la revisión deben ser claros, coherentes y mostrar un análisis desde un enfoque particular propio del curso, de manera que el caso seleccionado sea el adecuado.
+
+Descripción para evaluadores
+
+
+Este criterio orienta la valoración de la calidad académica del producto correspondiente a esta actividad. El evaluador debe revisar en qué medida el trabajo evidencia dominio conceptual, uso pertinente de fuentes confiables, coherencia y profundidad de la argumentación, originalidad en los aportes y respeto por la integridad académica, reflejado en la adecuada atribución de las fuentes y el uso responsable de la información, de acuerdo con los niveles de desempeño y rangos de puntaje definidos para este criterio en la rúbrica de la actividad.`,
+        c2Niveles: `Nivel alto: El contenido de la revisión de prensa cumple con las condiciones de:
+1) Selección de fuentes: Diversidad de fuentes en cuanto a línea editorial, regiones, enfoques, tiempo, etc.). Las fuentes son pertienentes en relación al resultado de aprendizaje de la actividad. Las noticias seleccionadas son actuales o en correspondencia con la ventana de tiempo señalada.
+2) Claridad y coherencia en la presentación de: introducción, resumen de noticias y análisis.
+3) Selección del caso a partir de: un enfoque critico que contraste perpectivas e identifique sesgos, una postura personal de acuerdo al contexto propio y un conocimiento básico de la disciplina o campo de estudio en la que se enmarca el curso. 
+
+Nivel medio: El contenido de la revisión de prensa cumple con las condiciones de:
+1) Selección de fuentes: Las fuentes son pertienentes en relación al resultado de aprendizaje de la actividad. Las noticias seleccionadas son actuales o en correspondencia con la ventana de tiempo señalada.
+2) Claridad y coherencia en la presentación de: introducción y resumen de noticias.
+3) Selección del caso a partir de: una postura personal de acuerdo al contexto propio y un conocimiento básico de la disciplina o campo de estudio en la que se enmarca el curso.
+
+Nivel bajo: El contenido de la revisión de prensa cumple con las condiciones de:
+1) Selección de fuentes: Las fuentes no son pertienentes en relación al resultado de aprendizaje de la actividad. No hay precisión con respecto a la ventana de tiempo señalada.
+2) Falta de claridad y coherencia en la presentación de: introducción, resumen de noticias y análisis.
+3) No hay un enfoque crítico, contextual y/o discplinar para la selección del caso.
+
+Segundo criterio de evaluación 
+
+Esta rúbrica orienta la valoración del contenido académico de la revisión de prensa, teniendo en cuenta la pertinencia y diversidad de las fuentes periodísticas seleccionadas, la claridad en la delimitación temporal y geográfica, la síntesis de las noticias relevantes, la identificación de tendencias y enfoques mediáticos, y la justificación crítica del caso elegido, en coherencia con los resultados de aprendizaje del curso.`,
+        c3Desc: `Se espera que la revisión de prensa conduzca a la selección del caso y tenga un estándar de calidad acorde con el nivel académico del curso (técnico, pregrado, posgrado, etc.) y con las problemáticas que el estudiante debería poder plantear y abordar, para el desarrollo de habilidades en un grado cognitivo asociado las siguiente categorías: memorización, comprensión, aplicación, análisis, síntesis o evaluación.
+
+Descripción para evaluadores
+
+
+Este criterio orienta la valoración de la calidad académica del producto correspondiente a esta actividad. El evaluador debe revisar en qué medida el trabajo evidencia dominio conceptual, uso pertinente de fuentes confiables, coherencia y profundidad de la argumentación, originalidad en los aportes y respeto por la integridad académica, reflejado en la adecuada atribución de las fuentes y el uso responsable de la información, de acuerdo con los niveles de desempeño y rangos de puntaje definidos para este tercer criterio en la rúbrica de la actividad.`
       },
       {
         id: "P3",
         title: "P3. Revisión de archivo",
-        strategies: ["Aprendizaje basado en casos", "Aprendizaje basado en escenarios", "Aprendizaje basado en proyectos"],
-        articulationText: "Permite aprovechar la revisión de archivo como fuente documental primaria para contextualizar casos e informes en articulación con:",
-        articulatedCodes: ["P1", "P4", "P5", "P9", "P10"],
-        structure: "1. Portada\n2. Introducción: Objetivo, justificación, alcance (temporal, temático, institucional).\n3. Metodología: Tipos de documentos revisados (actas, informes, expedientes), criterios y procedimiento de análisis.\n4. Descripción del archivo: Ubicación física/digital, organización, conservación y accesibilidad.\n5. Análisis de contenido: Temas recurrentes, evolución de conceptos, actores clave, eventos.\n6. Hallazgos: Descubrimientos, conexiones, vacíos o inconsistencias.\n7. Conclusiones y Listado de documentos revisados.",
-        format: "• Formato: .docx o .pdf\n• Extensión: 3000 a 4000 palabras.\n• Tablas diseñadas en formato editable directamente en el procesador de texto.",
-        c1Desc: "Valora organización de secciones, extensión, calidad de redacción y cumplimiento de pautas formales de referenciación documental.",
-        c1Alto: "Estructura completa de 8 secciones, descripción precisa del fondo documental y citas completas.",
-        c1Medio: "Falta profundidad en la descripción del archivo o procedimientos metodológicos de clasificación.",
-        c1Bajo: "Ausencia de secciones clave como análisis de contenido o metodología documental de selección.",
-        c2Desc: "Evalúa pertinencia del archivo seleccionado, sistematicidad en el análisis documental y justificación del caso según el curso.",
-        c2Alto: "Selección rigurosa y contextualizada del archivo con análisis metódico de vacíos e inconsistencias.",
-        c2Medio: "Archivo pertinente pero análisis descriptivo superficial sin conexión clara con el resultado de aprendizaje.",
-        c2Bajo: "Archivo no pertinente, falta de coherencia en el análisis y selección del caso no justificada.",
-        c3Desc: "Acredita el estándar de calidad investigativa, dominio de fuentes primarias e integridad en la citación de expedientes y archivos."
+        strategies: [
+          "Aprendizaje basado en casos",
+          "Aprendizaje basado en escenarios",
+          "Aprendizaje Basado en Investigación (ABI)"
+        ],
+        structure: `El producto entregable debe contar con:
+
+1. Portada: Título del documento. Fecha de elaboración. Autor o institución responsable. 
+2. Introducción: Objetivo de la revisión. Justificación del estudio. Alcance (temporal, temático, institucional). Breve descripción del archivo revisado. 
+3. Metodología: Tipo de documentos revisados (actas, informes, cartas, expedientes, etc.): Criterios de selección. Procedimiento de análisis (lectura, clasificación, codificación). Herramientas utilizadas (software, fichas, matrices). 
+4. Descripción del archivo: Ubicación física o digital: Organización del archivo (por series, secciones, fondos). Estado de conservación. Accesibilidad. 
+5. Análisis de contenido: Temas recurrentes. Evolución de conceptos o prácticas. Identificación de actores clave. Eventos relevantes documentados. 
+6. Hallazgos: Principales descubrimientos. Conexiones entre documentos. Vacíos o inconsistencias encontradas. 
+7. Conclusiones: Valor del archivo para la investigación o gestión. Selección de caso a estudiar.
+8. Listado de documentos revisados.`,
+        format: `Formato (soporte):
+
+• Archivo en.docx (Word)
+• Archivo en.pdf
+
+Tecnológico:
+
+• Extensión sugerida entre 3000 y 4000 palabras.
+• Las tablas o cuadros comparativos deben diseñarse e incrustarse directamente en el archivo en formato editable (Word), es decir, no como imagen, ni como captura de pantalla, ni como hoja de cálculo de Excel. Tampoco se permite enlazar direcciones URL externas ni vínculos a repositorios en la nube.`,
+        c1Desc: `Se espera que la revisión de archivo conduzca a la selección del caso y tenga un estándar de calidad acorde con el nivel académico del curso (técnico, pregrado, posgrado, etc.) y con las problemáticas que el estudiante debería poder plantear y abordar, para el desarrollo de habilidades en un grado cognitivo asociado las siguiente categorías: memorización, comprensión, aplicación, análisis, síntesis o evaluación.
+
+Descripción para evaluadores
+
+
+Este criterio orienta la valoración de la calidad académica del producto correspondiente a esta actividad. El evaluador debe revisar en qué medida el trabajo evidencia dominio conceptual, uso pertinente de fuentes confiables, coherencia y profundidad de la argumentación, originalidad en los aportes y respeto por la integridad académica, reflejado en la adecuada atribución de las fuentes y el uso responsable de la información, de acuerdo con los niveles de desempeño y rangos de puntaje definidos para este criterio en la rúbrica de la actividad.`,
+        c1Niveles: `Nivel alto: La revisión de archivo cuenta con:
+1) Portada: Título del documento. Fecha de elaboración. Autor o institución responsable. 
+2) Introducción: Objetivo de la revisión. Justificación del estudio. Alcance.
+3) Metodología: Tipo de documentos revisados: Criterios de selección. Procedimiento de análisis. Herramientas utilizadas. 
+4) Descripción del archivo: Ubicación física o digital: Organización del archivo. Estado de conservación. Accesibilidad. 
+5) Análisis de contenido: Temas recurrentes. Evolución de conceptos o prácticas. Identificación de actores clave. Eventos relevantes documentados. 
+6) Hallazgos: Principales descubrimientos. Conexiones entre documentos. Vacíos o inconsistencias encontradas. 
+7) Conclusiones: Valor del archivo para la investigación o gestión. Selección de caso a estudiar.
+8) Listado de documentos revisados: uso de normas APA.
+
+Nivel medio: La revisión de archivo cuenta con:
+1) Portada: Título del documento. Fecha de elaboración. Autor o institución responsable. 
+2) Introducción: Objetivo de la revisión. Alcance.
+3) Metodología: Tipo de documentos revisados: Criterios de selección. Herramientas utilizadas. 
+4) Descripción del archivo: Ubicación física o digital: Organización del archivo. Accesibilidad. 
+5) Análisis de contenido: Temas recurrentes. Identificación de actores clave. Eventos relevantes documentados. 
+6) Hallazgos: Principales descubrimientos. Conexiones entre documentos. 
+7) Conclusiones: Selección de caso a estudiar.
+8) Listado de documentos revisados: uso de normas APA.
+
+Nivel bajo: La revisión de archivo cuenta con:
+1) Portada: Título del documento. Fecha de elaboración. Autor o institución responsable. 
+2) Introducción: Objetivo de la revisión.
+3) Metodología: Tipo de documentos revisados: Criterios de selección. 
+4) Descripción del archivo: Ubicación física o digital. 
+5) Análisis de contenido: Temas recurrentes. 
+6) Hallazgos: Principales descubrimientos. 
+7) Conclusiones: Selección de caso a estudiar.
+8) Listado de documentos revisados: uso de normas APA.
+
+Primer criterio de evaluación 
+
+
+Esta rúbrica orienta la valoración de la presentación formal de la revisión de archivo, considerando la organización y rotulación de las secciones del documento (portada, introducción, metodología, descripción del archivo, análisis de contenido, hallazgos, conclusiones y listado de documentos revisados), el cumplimiento de la extensión y del formato de entrega establecidos (.docx o .pdf), así como la claridad, coherencia y corrección básica de la redacción y el uso adecuado de las normas de citación y referenciación.`,
+        c2Desc: `Se espera que la revisión de archivo sea pertinente y acorde al desarrollo de los contenidos asociados al resultado de aprendizaje y al contexto histórico y geográfico (ventana de tiempo y lugar) señalado; igualmente, los textos de la revisión deben ser claros, coherentes y mostrar un análisis desde un enfoque particular propio del curso, de manera que el caso seleccionado sea el adecuado.
+
+Descripción para evaluadores
+
+
+Este criterio orienta la valoración de la calidad académica del producto correspondiente a esta actividad. El evaluador debe revisar en qué medida el trabajo evidencia dominio conceptual, uso pertinente de fuentes confiables, coherencia y profundidad de la argumentación, originalidad en los aportes y respeto por la integridad académica, reflejado en la adecuada atribución de las fuentes y el uso responsable de la información, de acuerdo con los niveles de desempeño y rangos de puntaje definidos para este  criterio en la rúbrica de la actividad.`,
+        c2Niveles: `Nivel alto: El contenido de la revisión de archivo cumple con las condiciones de:
+1) Selección y contextualización de archivo: Pertienencia del archivo elegido en relación con los contenidos del curso. Justificación de la relevancia del archivo para el estudio que se desea emprender.
+2) Claridad y coherencia en la descripción del archivo y en la estructuración del análisis y presentación de hallazgos.
+3) Selección del caso a partir de: un enfoque metodológico riguroso, una postura personal de acuerdo al contexto propio y un conocimiento básico de la disciplina o campo de estudio en la que se enmarca el curso.
+
+Nivel medio: El contenido de la revisión de archivo cumple con las condiciones de:
+1) Selección y contextualización de archivo: Pertienencia del archivo elegido en relación con los contenidos del curso.
+2) Claridad y coherencia insuficiente en la descripción del archivo y en la estructuración del análisis y presentación de hallazgos.
+3) Selección del caso a partir de: una postura personal de acuerdo al contexto propio y un conocimiento básico de la disciplina o campo de estudio en la que se enmarca el curso.
+
+Nivel bajo: El contenido de la revisión de archivo cumple con las condiciones de:
+1) Selección y contextualización de archivo: falta de pertienencia del archivo elegido en relación con los contenidos del curso.
+2) Falta de claridad y coherencia en la descripción del archivo y en la estructuración del análisis y presentación de hallazgos.
+3) La selección del caso no se basa en un enfoque metodológico riguroso y no demuestra una postura personal de acuerdo al contexto propio y un conocimiento básico de la disciplina o campo de estudio en la que se enmarca el curso.
+
+Segundo criterio de evaluación
+
+Esta rúbrica orienta la valoración del contenido académico de la revisión de archivo, teniendo en cuenta la pertinencia del archivo seleccionado frente a los resultados de aprendizaje del curso, la claridad en la contextualización y delimitación del archivo, la sistematicidad del análisis de los documentos (temas, actores, eventos, conexiones y vacíos) y la justificación crítica del caso elegido para su estudio, en coherencia con el nivel formativo y el enfoque metodológico propio del curso.`,
+        c3Desc: `Se espera que la revisión de archivo conduzca a la selección del caso y tenga un estándar de calidad acorde con el nivel académico del curso (técnico, pregrado, posgrado, etc.) y con las problemáticas que el estudiante debería poder plantear y abordar, para el desarrollo de habilidades en un grado cognitivo asociado las siguiente categorías: memorización, comprensión, aplicación, análisis, síntesis o evaluación.
+
+Descripción para evaluadores
+
+
+Este criterio orienta la valoración de la calidad académica del producto correspondiente a esta actividad. El evaluador debe revisar en qué medida el trabajo evidencia dominio conceptual, uso pertinente de fuentes confiables, coherencia y profundidad de la argumentación, originalidad en los aportes y respeto por la integridad académica, reflejado en la adecuada atribución de las fuentes y el uso responsable de la información, de acuerdo con los niveles de desempeño y rangos de puntaje definidos para este tercer criterio en la rúbrica de la actividad.`
       },
       {
         id: "P4",
-        title: "P4. Informe académico descriptivo",
-        strategies: ["Aprendizaje basado en casos", "Aprendizaje basado en tareas", "Aprendizaje basado en escenarios", "Aprendizaje basado en proyectos"],
-        articulationText: "La información organizada en el informe descriptivo sirve de base para la comunicación oral y profundización reflexiva en:",
-        articulatedCodes: ["P1", "P2", "P3", "P7", "P8", "P9"],
-        structure: "• Título claro y conciso.\n• Introducción: Contextualización, objetivo y estructura.\n• Objetivos: Redacción precisa y coherente.\n• Procedimientos: Metodología descriptiva empleada.\n• Resultados: Presentación objetiva de datos y hallazgos sin juicios de valor subjetivos.\n• Conclusiones: Síntesis de la observación descriptiva.\n• Referencias bibliográficas.",
-        format: "• Documento en PDF o Word (.docx).\n• Redacción académica impersonal, lenguaje técnico preciso y estructurado según plantilla institucional.",
-        c1Desc: "Valora el cumplimiento de pautas de estilo, títulos, orden lógico, distinción de fuentes y referenciación.",
-        c1Alto: "Cumple rigurosamente con la estructura objetiva, citación oportuna y excelente sintaxis académica.",
-        c1Medio: "Presenta la estructura pero incluye leves sesgos de interpretación personal o errores menores de citación.",
-        c1Bajo: "Mezcla opinión personal sin evidencia, desorganización en el procedimiento y ausencia de referencias.",
-        c2Desc: "Evalúa la precisión en la descripción de hechos, pertinencia de antecedentes recopilados y rigurosidad de los datos.",
-        c2Alto: "Descripción exhaustiva y objetiva, datos completamente verificables e integración idónea de teorías.",
-        c2Medio: "Descripción aceptable pero omite variables clave o antecedentes relevantes del hecho o proceso.",
-        c2Bajo: "Datos insuficientes, imprecisión técnica y falta de rigor en la descripción del objeto de estudio.",
-        c3Desc: "Determina la calidad académica global, objetividad del escrito y respeto por los derechos de autor e integridad científica."
+        title: "P4. Informes académicos (Informe descriptivo)",
+        strategies: [
+          "Aprendizaje basado en tareas",
+          "Aprendizaje basado en escenarios",
+          "Aprendizaje Basado en Investigación (ABI)"
+        ],
+        structure: `El informe académico descriptivo es un documento estructurado en el que el estudiante presenta, de manera organizada, clara y fundamentada, la descripción objetiva de un hecho, proceso o situación, con base en evidencias verificables. Su finalidad es comunicar información relevante sin emitir juicios de valor, apoyándose en datos, teorías y fuentes confiables.
+
+Este tipo de informe se caracteriza por detallar de forma precisa las características, condiciones u observaciones de un objeto de estudio, sin incluir interpretaciones personales o análisis subjetivos.
+
+Criterios de forma
+-Título: uso de palabras clave, claridad, concisión y lenguaje sencillo.
+- Introducción: contextualiza el tema, formula el objetivo, presenta la estructura del informe y motiva la lectura.
+- Desarrollo: distinción entre ideas propias y ajenas, pertinencia y orden lógico de citas, y revisión exhaustiva de antecedentes.
+- Objetivos: redacción precisa, interpretación unívoca y coherencia con el desarrollo.
+- Procedimientos: claridad y precisión en la metodología.
+- Resultados: presentación y análisis claros, énfasis en hallazgos relevantes y adecuada visualización de datos.
+- Conclusiones: discusión y síntesis coherentes con el marco teórico, objetividad en la valoración.
+- Referencias bibliográficas: presentación completa y actualización de las fuentes.
+- Calidad del escrito: corrección gramatical, coherencia y ortografía.
+
+Criterios de contenido
+- Profundidad y pertinencia: el contenido responde al objetivo y al Resultado de Aprendizaje, abordando el tema con suficiente detalle y sin desviarse.
+- Organización lógica: las secciones están interrelacionadas y siguen un orden que facilita la comprensión.
+- Fundamentación: la información está respaldada con fuentes académicas relevantes y actualizadas.
+- Precisión descriptiva: los datos y hechos son expuestos con exactitud, sin omisiones ni ambigüedades.
+
+Criterios de calidad académica
+- Uso preciso del vocabulario técnico del área.
+- Información exacta, verificada y presentada objetivamente.
+- Respeto por la propiedad intelectual, citación correcta y ausencia de plagio.
+- El estudiante aporta una visión crítica, propuestas o conclusiones que amplían el tema tratado.`,
+        format: `Formato (soporte):
+
+• Archivo en formato.docx (Word)
+• Archivo en formato.pdf
+
+Tecnológico:
+
+•Extensión mínima de 1000 palabras y máxima de 1500 palabras (sin referencias bibliográficas).
+•No se permite insertar imágenes como texto dentro del documento.
+•Las tablas o cuadros comparativos deben diseñarse e incrustarse directamente en el archivo en formato editable.
+•No se admite la inserción de tablas provenientes de hojas de cálculo externas, el uso de capturas de pantalla o imágenes.
+•Tampoco se permite enlazar direcciones URL externas ni vínculos a repositorios en la nube.`,
+        c1Desc: `Se espera que la revisión de archivo conduzca a la selección del caso y tenga un estándar de calidad acorde con el nivel académico del curso (técnico, pregrado, posgrado, etc.) y con las problemáticas que el estudiante debería poder plantear y abordar, para el desarrollo de habilidades en un grado cognitivo asociado las siguiente categorías: memorización, comprensión, aplicación, análisis, síntesis o evaluación.
+
+Descripción para evaluadores
+
+
+Este criterio orienta la valoración de la calidad académica del producto correspondiente a esta actividad. El evaluador debe revisar en qué medida el trabajo evidencia dominio conceptual, uso pertinente de fuentes confiables, coherencia y profundidad de la argumentación, originalidad en los aportes y respeto por la integridad académica, reflejado en la adecuada atribución de las fuentes y el uso responsable de la información, de acuerdo con los niveles de desempeño y rangos de puntaje definidos para este criterio en la rubrica de la actividad.`,
+        c1Niveles: `Nivel alto: El informe presenta todos los apartados solicitados (título, introducción, desarrollo, conclusiones y referencias) con una secuencia lógica y fluida. La estructura obedece a la guía de aprendizaje y cada sección está claramente diferenciada. Cumple con el formato soliictado (.docx o .pdf), cumple con la extensión solicitada de 1000 palabras y máxima de 1500 palabras (sin referencias bibliográficas), sin imágenes incrustadas ni enlaces externos. La redacción es clara, precisa y coherente, sin errores gramaticales u ortográficos.
+
+Nivel medio: El informe presenta la mayoría de los apartados solicitados, pero se identifican vacíos leves en la secuencia o en la diferenciación de secciones. Presenta leves incumplimientos en formato o extensión. La redacción es comprensible pero evidencia fallas menores de gramática u ortografía.
+
+Nivel bajo: El informe omite varios apartados esenciales o no sigue una estructura lógica. Incumple de manera significativa con los requerimientos de formato y extensión. La redacción es confusa, desordenada o presenta frecuentes errores gramaticales que dificultan la comprensión.`,
+        c2Desc: `Se espera que el informe académico descriptivo exponga con exactitud y objetividad el tema, proceso u objeto de estudio, basándose en información rigurosa y actualizada.
+
+Descripción para evaluadores
+
+
+Este criterio orienta la valoración del contenido académico, verificando la precisión, objetividad y sustentación técnica del desarrollo temático en coherencia con los resultados de aprendizaje.`,
+        c2Niveles: `Nivel alto: Desarrollo temático profundo, riguroso y objetivo. Presenta datos verificables, conceptos bien fundamentados y una distinción clara entre ideas propias y fuentes consultadas.
+
+Nivel medio: Desarrollo temático adecuado pero superficial en algunos puntos. Presenta la información de forma objetiva pero con escasa fundamentación teórica o datos secundarios incompletos.
+
+Nivel bajo: Desarrollo temático deficiente, impreciso o con inclusión de apreciaciones subjetivas sin sustento. Omite datos clave y carece de fundamentación académica.`,
+        c3Desc: `Se espera un estándar de calidad profesional en el manejo ético de fuentes, léxico técnico disciplinar e integridad científica.`
       }
     ];
 
     let currentStrategy = "Todas las estrategias";
     let selectedProductId = null;
 
-    // Inicialización
     document.addEventListener("DOMContentLoaded", () => {
       lucide.createIcons();
       initStrategySelect();
@@ -379,13 +625,12 @@
       document.getElementById("product-count").innerText = `${filtered.length} disponibles`;
 
       if (filtered.length === 0) {
-        container.innerHTML = `<p class="text-xs text-slate-400 italic p-3 text-center">No se encontraron productos para esta búsqueda o estrategia.</p>`;
+        container.innerHTML = `<p class="text-xs text-slate-400 italic p-3 text-center">No hay productos asociados directamente a esta estrategia.</p>`;
         return;
       }
 
       container.innerHTML = filtered.map(p => {
         const isSelected = p.id === selectedProductId;
-        const isDirect = currentStrategy === "Todas las estrategias" || p.strategies.includes(currentStrategy);
 
         return `
           <button onclick="selectProduct('${p.id}')" class="w-full text-left p-3 rounded-lg border transition-all flex flex-col gap-1 ${
@@ -395,8 +640,8 @@
           }">
             <div class="flex justify-between items-center">
               <span class="font-mono text-xs font-bold ${isSelected ? 'text-indigo-700' : 'text-slate-700'}">${p.id}</span>
-              <span class="text-[10px] font-medium px-2 py-0.5 rounded ${isDirect ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
-                ${isDirect ? 'Directo' : 'Articulado'}
+              <span class="text-[10px] font-medium px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">
+                Producto Directo
               </span>
             </div>
             <span class="text-xs font-semibold text-slate-800 line-clamp-2">${p.title.replace(/^P\d+\.\s*/, '')}</span>
@@ -424,40 +669,14 @@
       document.getElementById("detail-title").innerText = p.title;
       document.getElementById("detail-strategy").innerHTML = `<i data-lucide="book-open" class="w-3.5 h-3.5"></i> Estrategia activa: <span class="text-slate-800 font-semibold">${currentStrategy}</span>`;
       
-      const isDirect = currentStrategy === "Todas las estrategias" || p.strategies.includes(currentStrategy);
-      const badge = document.getElementById("detail-badge");
-      badge.innerText = isDirect ? "Producto Directo de la Estrategia" : "Producto de Articulación Sugerida";
-      badge.className = isDirect 
-        ? "px-2.5 py-0.5 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800"
-        : "px-2.5 py-0.5 text-xs font-semibold rounded-full bg-amber-100 text-amber-800";
-
-      // Articulación
-      document.getElementById("detail-articulation-text").innerText = p.articulationText;
-      const pillsContainer = document.getElementById("articulation-pills");
-      pillsContainer.innerHTML = p.articulatedCodes.map(code => {
-        const target = PRODUCTS.find(item => item.id === code);
-        const titleText = target ? target.title : code;
-        return `
-          <button onclick="selectProduct('${code}')" class="px-2.5 py-1 bg-white border border-amber-300 hover:border-indigo-500 hover:text-indigo-600 text-amber-900 rounded font-mono text-xs font-bold transition-colors flex items-center gap-1 shadow-sm" title="Consultar ${titleText}">
-            <i data-lucide="link" class="w-3 h-3 text-amber-600"></i> ${code}
-          </button>
-        `;
-      }).join("");
-
-      // Estructura y Formato
       document.getElementById("detail-structure").innerText = p.structure;
       document.getElementById("detail-format").innerText = p.format;
 
-      // Criterios
       document.getElementById("c1-desc").innerText = p.c1Desc;
-      document.getElementById("c1-alto").innerText = p.c1Alto;
-      document.getElementById("c1-medio").innerText = p.c1Medio;
-      document.getElementById("c1-bajo").innerText = p.c1Bajo;
+      document.getElementById("c1-niveles").innerText = p.c1Niveles;
 
       document.getElementById("c2-desc").innerText = p.c2Desc;
-      document.getElementById("c2-alto").innerText = p.c2Alto;
-      document.getElementById("c2-medio").innerText = p.c2Medio;
-      document.getElementById("c2-bajo").innerText = p.c2Bajo;
+      document.getElementById("c2-niveles").innerText = p.c2Niveles;
 
       document.getElementById("c3-desc").innerText = p.c3Desc;
 
@@ -469,14 +688,15 @@
       if (!p) return;
 
       const text = `FICHA EVALUIA - ${p.title}\n` +
-        `Estrategia: ${currentStrategy}\n\n` +
-        `ESTRUCTURA:\n${p.structure}\n\n` +
-        `FORMATO:\n${p.format}\n\n` +
-        `CRITERIO 1 (FORMA):\n${p.c1Desc}\nAlto: ${p.c1Alto}\n\n` +
-        `CRITERIO 2 (CONTENIDO):\n${p.c2Desc}\nAlto: ${p.c2Alto}`;
+        `Estrategia activa: ${currentStrategy}\n\n` +
+        `ESTRUCTURA (GUÍA DE APRENDIZAJE):\n${p.structure}\n\n` +
+        `FORMATO (SOPORTE TECNOLÓGICO):\n${p.format}\n\n` +
+        `PRIMER CRITERIO (FORMA - MOODLE):\n${p.c1Desc}\n\n${p.c1Niveles}\n\n` +
+        `SEGUNDO CRITERIO (CONTENIDO - MOODLE):\n${p.c2Desc}\n\n${p.c2Niveles}\n\n` +
+        `TERCER CRITERIO (CALIDAD ACADÉMICA):\n${p.c3Desc}`;
 
       navigator.clipboard.writeText(text).then(() => {
-        alert("Ficha de evaluación copiada al portapapeles con éxito.");
+        alert("Ficha completa de evaluación copiada al portapapeles con éxito.");
       });
     }
   </script>
