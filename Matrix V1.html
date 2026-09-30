@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EvaluIA - Matriz de Evaluación e Itinerarios Académicos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    @media print {
+      body * { visibility: hidden; }
+      #printable-area, #printable-area * { visibility: visible; }
+      #printable-area { position: absolute; left: 0; top: 0; width: 100%; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-indigo-900 text-white shadow-md border-b border-indigo-800 no-print">
+    <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="p-2 bg-indigo-700 rounded-lg">
+          <i data-lucide="award" class="w-7 h-7 text-indigo-200"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight">EvaluIA Docente</h1>
+          <p class="text-xs text-indigo-200">Matriz Evaluativa Automatizada e Itinerarios Pedagógicos</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2 text-xs bg-indigo-950/60 px-3 py-1.5 rounded-full border border-indigo-700/50">
+        <i data-lucide="info" class="w-4 h-4 text-amber-400"></i>
+        <span>En cada actividad se evalúa un <strong>único producto</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- Sidebar / Selection Panel -->
+    <aside class="lg:col-span-4 space-y-6 no-print">
+      
+      <!-- Paso 1: Selección de Estrategia -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <label class="block text-xs font-bold uppercase tracking-wider text-indigo-600 mb-2 flex items-center gap-2">
+          <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs">1</span>
+          Seleccione la Estrategia Metodológica
+        </label>
+        <select id="strategy-select" onchange="onStrategyChange()" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2.5 font-medium transition-colors">
+          <!-- Populated by JS -->
+        </select>
+        <p class="text-xs text-slate-500 mt-2 flex items-center gap-1">
+          <i data-lucide="layers" class="w-3.5 h-3.5 text-slate-400"></i>
+          Filtra la lista de productos pedagógicos compatibles.
+        </p>
+      </div>
+
+      <!-- Paso 2: Selección de Producto -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+        <div class="flex justify-between items-center mb-3">
+          <label class="text-xs font-bold uppercase tracking-wider text-indigo-600 flex items-center gap-2">
+            <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs">2</span>
+            Elija el Producto / Entregable
+          </label>
+          <span id="product-count" class="text-xs font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">0 disponibles</span>
+        </div>
+
+        <!-- Buscador interno -->
+        <div class="relative mb-3">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
+          <input type="text" id="search-input" oninput="filterProducts()" placeholder="Buscar producto o código (ej: P1, informe)..." class="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500">
+        </div>
+
+        <!-- Lista de productos -->
+        <div id="products-list" class="space-y-2 max-h-[420px] overflow-y-auto pr-1">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Detailed View Panel -->
+    <section class="lg:col-span-8 space-y-6">
+      
+      <div id="printable-area" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8 min-h-[600px] relative">
+        
+        <!-- Placeholder / Empty State -->
+        <div id="empty-state" class="flex flex-col items-center justify-center h-full py-20 text-center">
+          <div class="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mb-4">
+            <i data-lucide="file-search" class="w-8 h-8"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-slate-700 mb-1">Ningún producto seleccionado</h3>
+          <p class="text-sm text-slate-500 max-w-sm">Seleccione una estrategia metodológica y elija un producto académico de la lista izquierda para desplegar su matriz de evaluación.</p>
+        </div>
+
+        <!-- Content Area -->
+        <div id="product-detail" class="hidden space-y-6">
+          
+          <!-- Encabezado Ficha -->
+          <div class="border-b border-slate-200 pb-5">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <div class="flex items-center gap-2">
+                <span id="detail-code" class="px-2.5 py-1 bg-indigo-900 text-white font-mono font-bold text-xs rounded">P1</span>
+                <span id="detail-badge" class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">Producto Directo</span>
+              </div>
+              <div class="flex items-center space-x-2 no-print">
+                <button onclick="copyContent()" class="p-2 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors" title="Copiar resumen al portapapeles">
+                  <i data-lucide="copy" class="w-4 h-4"></i> Copiar Ficha
+                </button>
+                <button onclick="window.print()" class="p-2 text-slate-500 hover:text-indigo-600 hover:bg-slate-100 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors" title="Imprimir o guardar PDF">
+                  <i data-lucide="printer" class="w-4 h-4"></i> Imprimir
+                </button>
+              </div>
+            </div>
+            <h2 id="detail-title" class="text-2xl font-bold text-slate-900">Vídeo expositivo de presentación del caso</h2>
+            <p id="detail-strategy" class="text-xs font-medium text-slate-500 mt-1 flex items-center gap-1">
+              <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Estrategia: <span class="text-slate-800 font-semibold">Aprendizaje basado en casos</span>
+            </p>
+          </div>
+
+          <!-- Columna 3: Articulación con otros productos -->
+          <div class="bg-amber-50/70 border border-amber-200 rounded-lg p-4">
+            <h4 class="text-xs font-bold text-amber-900 uppercase tracking-wide flex items-center gap-1.5 mb-2">
+              <i data-lucide="git-fork" class="w-4 h-4 text-amber-600"></i>
+              Articulación con otros productos académicos
+            </h4>
+            <p id="detail-articulation-text" class="text-xs text-amber-900/80 mb-3 leading-relaxed">
+              Para el diseño de las actividades que conducen a este producto, el docente puede apoyarse en los siguientes productos relacionados:
+            </p>
+            <div id="articulation-pills" class="flex flex-wrap gap-2">
+              <!-- Pills generated by JS -->
+            </div>
+            <p class="text-[11px] text-amber-700/80 italic mt-3 border-t border-amber-200/60 pt-2">
+              * Nota: Cada producto articulado puede seleccionarse individualmente para consultar su rúbrica parametrizada.
+            </p>
+          </div>
+
+          <!-- Columna 4: Estructura (Parametrización académica) -->
+          <div class="space-y-2">
+            <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+              <i data-lucide="layout-list" class="w-4 h-4 text-indigo-600"></i>
+              Estructura (Parametrización académica del entregable en la Guía)
+            </h3>
+            <div id="detail-structure" class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-lg border border-slate-200 whitespace-pre-line">
+              <!-- Content -->
+            </div>
+          </div>
+
+          <!-- Columna 5: Formato y Soporte Tecnológico -->
+          <div class="space-y-2">
+            <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+              <i data-lucide="laptop" class="w-4 h-4 text-indigo-600"></i>
+              Formato (Soporte Tecnológico Requerido)
+            </h3>
+            <div id="detail-format" class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-4 rounded-lg border border-slate-200 whitespace-pre-line">
+              <!-- Content -->
+            </div>
+          </div>
+
+          <!-- Criterios de Evaluación y Rúbricas (Columnas 6 a 11) -->
+          <div class="pt-4 border-t border-slate-200 space-y-6">
+            <h3 class="text-base font-bold text-indigo-950 flex items-center gap-2">
+              <i data-lucide="check-square" class="w-5 h-5 text-indigo-600"></i>
+              Criterios de Evaluación y Niveles de Rúbrica (Moodle)
+            </h3>
+
+            <!-- Criterio 1: De Forma -->
+            <div class="border border-slate-200 rounded-lg overflow-hidden">
+              <div class="bg-indigo-50 border-b border-indigo-100 px-4 py-2.5 flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-900 flex items-center gap-2">
+                  <i data-lucide="file-text" class="w-4 h-4 text-indigo-600"></i>
+                  Primer Criterio: Forma
+                </span>
+                <span class="text-[11px] bg-white text-indigo-800 px-2 py-0.5 rounded border border-indigo-200 font-semibold">Calificación Avanzada</span>
+              </div>
+              <div class="p-4 space-y-3">
+                <p id="c1-desc" class="text-xs text-slate-600 italic leading-relaxed"></p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+                  <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-lg">
+                    <span class="text-[11px] font-bold text-emerald-800 block mb-1">Nivel Alto</span>
+                    <p id="c1-alto" class="text-xs text-slate-700"></p>
+                  </div>
+                  <div class="bg-amber-50 border border-amber-200 p-3 rounded-lg">
+                    <span class="text-[11px] font-bold text-amber-800 block mb-1">Nivel Medio</span>
+                    <p id="c1-medio" class="text-xs text-slate-700"></p>
+                  </div>
+                  <div class="bg-rose-50 border border-rose-200 p-3 rounded-lg">
+                    <span class="text-[11px] font-bold text-rose-800 block mb-1">Nivel Bajo</span>
+                    <p id="c1-bajo" class="text-xs text-slate-700"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Criterio 2: De Contenido -->
+            <div class="border border-slate-200 rounded-lg overflow-hidden">
+              <div class="bg-indigo-50 border-b border-indigo-100 px-4 py-2.5 flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-900 flex items-center gap-2">
+                  <i data-lucide="align-left" class="w-4 h-4 text-indigo-600"></i>
+                  Segundo Criterio: Contenido
+                </span>
+                <span class="text-[11px] bg-white text-indigo-800 px-2 py-0.5 rounded border border-indigo-200 font-semibold">Calificación Avanzada</span>
+              </div>
+              <div class="p-4 space-y-3">
+                <p id="c2-desc" class="text-xs text-slate-600 italic leading-relaxed"></p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+                  <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-lg">
+                    <span class="text-[11px] font-bold text-emerald-800 block mb-1">Nivel Alto</span>
+                    <p id="c2-alto" class="text-xs text-slate-700"></p>
+                  </div>
+                  <div class="bg-amber-50 border border-amber-200 p-3 rounded-lg">
+                    <span class="text-[11px] font-bold text-amber-800 block mb-1">Nivel Medio</span>
+                    <p id="c2-medio" class="text-xs text-slate-700"></p>
+                  </div>
+                  <div class="bg-rose-50 border border-rose-200 p-3 rounded-lg">
+                    <span class="text-[11px] font-bold text-rose-800 block mb-1">Nivel Bajo</span>
+                    <p id="c2-bajo" class="text-xs text-slate-700"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Criterio 3: Calidad Académica -->
+            <div class="border border-slate-200 rounded-lg overflow-hidden">
+              <div class="bg-slate-100 border-b border-slate-200 px-4 py-2.5">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                  <i data-lucide="shield-check" class="w-4 h-4 text-slate-600"></i>
+                  Tercer Criterio: Calidad Académica
+                </span>
+              </div>
+              <div class="p-4">
+                <p id="c3-desc" class="text-xs text-slate-700 leading-relaxed"></p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Script Data & Logic -->
+  <script>
+    // Datos completos extraídos de la Matriz EvaluIA
+    const STRATEGIES = [
+      "Todas las estrategias",
+      "Aprendizaje basado en casos",
+      "Aprendizaje basado en tareas",
+      "Aprendizaje basado en escenarios",
+      "Aprendizaje basado en proyectos",
+      "Aprendizaje basado en problemas (ABP)",
+      "Aprendizaje Basado en Retos (ABR)",
+      "Aprendizaje Basado en Investigación (ABI)"
+    ];
+
+    const PRODUCTS = [
+      {
+        id: "P1",
+        title: "P1. Vídeo expositivo de presentación del caso",
+        strategies: [
+          "Aprendizaje basado en casos",
+          "Aprendizaje basado en tareas",
+          "Aprendizaje basado en escenarios",
+          "Aprendizaje basado en proyectos",
+          "Aprendizaje basado en problemas (ABP)"
+        ],
+        articulationText: "Para el diseño de las actividades que conducen a este producto (video expositivo de presentación del caso), el docente puede apoyarse en los siguientes productos:",
+        articulatedCodes: ["P2", "P3", "P4"],
+        structure: "1. Introducción: Presentación del caso: título, contexto general y relevancia. Objetivo de la exposición: qué se pretende mostrar o resolver. Justificación: por qué se eligió el caso y su importancia académica o profesional.\n2. Descripción del caso: Contexto específico: lugar, tiempo, actores involucrados. Situación problemática: hechos clave, conflicto o dilema central. Datos relevantes.\n3. Análisis preliminar del caso: Identificación del problema principal. Causas y consecuencias. Perspectiva teórica. Valoración crítica (FODA).\n4. Alternativas de solución y Criterios de evaluación.\n5. Propuesta de solución: Solución elegida, plan de acción, impacto esperado.\n6. Conclusiones y Preguntas de discusión.\n7. Referencias bibliográficas (Normas APA).",
+        format: "• Archivo en formato MP4 (exportado desde PowerPoint).\n• Duración máxima: 10 minutos.\n• Peso máximo: 200 MB.\n• Las tablas o cuadros comparativos deben diseñarse directamente en formato editable; no se admiten imágenes, capturas ni URLs externas.",
+        c1Desc: "Esta rúbrica orienta la valoración de la presentación formal del video expositivo, considerando la estructura de secciones, claridad y fluidez del discurso, tiempo e indicaciones técnicas.",
+        c1Alto: "Cumple con las 8 secciones completas (Introducción, Descripción, Análisis, Alternativas, Propuesta, Conclusiones, Discusión, Referencias APA).",
+        c1Medio: "Cumple con la mayoría de las secciones pero omite análisis preliminar detallado o preguntas de discusión.",
+        c1Bajo: "Estructura incompleta, sólo presenta introducción básica, caso general y conclusiones sin referencias adecuadas.",
+        c2Desc: "Esta rúbrica orienta la valoración del contenido académico, precisión en la presentación del caso, coherencia del análisis y pertinencia de las alternativas planteadas.",
+        c2Alto: "Claridad en objetivos, alta precisión y síntesis, análisis profundo sustentado con perspectiva teórica y soluciones altamente pertinentes.",
+        c2Medio: "Claridad en objetivos pero falta precisión en la síntesis del caso. Análisis preliminar crítico pero carente de sustentación teórica sólida.",
+        c2Bajo: "Falta de claridad en objetivos, análisis superficial sin estructuras argumentativas ni pertinencia contextual.",
+        c3Desc: "Se espera un estándar de calidad acorde con el nivel académico del curso. El evaluador revisará dominio conceptual, uso pertinente de fuentes confiables, coherencia y profundidad argumentativa y rigor en atribución de fuentes."
+      },
+      {
+        id: "P2",
+        title: "P2. Revisión de prensa",
+        strategies: ["Aprendizaje basado en casos"],
+        articulationText: "Para el diseño de las actividades que conducen a este producto (revisión de prensa), el docente puede articular su uso con los siguientes productos:",
+        articulatedCodes: ["P1", "P4", "P5", "P9", "P10"],
+        structure: "1. Portada: Título, fecha, autor/institución.\n2. Introducción: Breve explicación del objetivo, justificación, alcance temporal y geográfico.\n3. Metodología: Fuentes utilizadas (periódicos, portales digitales), criterios de selección y palabras clave.\n4. Resumen de noticias: Presentación cronológica o temática con síntesis de cada noticia.\n5. Breve análisis: Identificación de tendencias, enfoques, comparación entre medios e impacto social.\n6. Conclusiones: Hallazgos principales, selección del caso para estudio y justificación.\n7. Referencias de fuentes (Normas APA).",
+        format: "• Archivo en .docx (Word) o .pdf\n• Extensión sugerida: entre 3000 y 4000 palabras.\n• Tablas editables dentro del documento Word (no capturas de pantalla ni enlaces externos).",
+        c1Desc: "Esta rúbrica orienta la valoración de la presentación formal, organización y rotulación de secciones, extensión, formato de entrega y normas de citación.",
+        c1Alto: "Incluye las 7 secciones estructurales completas, excelente redacción y citación en Normas APA impecable.",
+        c1Medio: "Incluye la mayoría de las secciones pero omite la justificación del alcance metodológico o fallas menores en APA.",
+        c1Bajo: "Estructura incompleta, sin formato claro de secciones ni uso correcto de normas de citación.",
+        c2Desc: "Valora el contenido académico, pertinencia y diversidad de las fuentes periodísticas seleccionadas, síntesis y justificación crítica del caso elegido.",
+        c2Alto: "Fuentes diversas y altamente pertinentes, excelente síntesis cronológica y postura crítica fundamentada.",
+        c2Medio: "Fuentes pertinentes pero poco diversas. Análisis descriptivo sin suficiente contraste entre líneas editoriales.",
+        c2Bajo: "Fuentes no pertinentes o fuera de la ventana de tiempo. Sin enfoque crítico ni justificación disciplinar del caso.",
+        c3Desc: "Evaluación de la calidad académica, dominio conceptual, rigor en la recopilación documental y responsabilidad en la atribución de derechos de autor."
+      },
+      {
+        id: "P3",
+        title: "P3. Revisión de archivo",
+        strategies: ["Aprendizaje basado en casos", "Aprendizaje basado en escenarios", "Aprendizaje basado en proyectos"],
+        articulationText: "Permite aprovechar la revisión de archivo como fuente documental primaria para contextualizar casos e informes en articulación con:",
+        articulatedCodes: ["P1", "P4", "P5", "P9", "P10"],
+        structure: "1. Portada\n2. Introducción: Objetivo, justificación, alcance (temporal, temático, institucional).\n3. Metodología: Tipos de documentos revisados (actas, informes, expedientes), criterios y procedimiento de análisis.\n4. Descripción del archivo: Ubicación física/digital, organización, conservación y accesibilidad.\n5. Análisis de contenido: Temas recurrentes, evolución de conceptos, actores clave, eventos.\n6. Hallazgos: Descubrimientos, conexiones, vacíos o inconsistencias.\n7. Conclusiones y Listado de documentos revisados.",
+        format: "• Formato: .docx o .pdf\n• Extensión: 3000 a 4000 palabras.\n• Tablas diseñadas en formato editable directamente en el procesador de texto.",
+        c1Desc: "Valora organización de secciones, extensión, calidad de redacción y cumplimiento de pautas formales de referenciación documental.",
+        c1Alto: "Estructura completa de 8 secciones, descripción precisa del fondo documental y citas completas.",
+        c1Medio: "Falta profundidad en la descripción del archivo o procedimientos metodológicos de clasificación.",
+        c1Bajo: "Ausencia de secciones clave como análisis de contenido o metodología documental de selección.",
+        c2Desc: "Evalúa pertinencia del archivo seleccionado, sistematicidad en el análisis documental y justificación del caso según el curso.",
+        c2Alto: "Selección rigurosa y contextualizada del archivo con análisis metódico de vacíos e inconsistencias.",
+        c2Medio: "Archivo pertinente pero análisis descriptivo superficial sin conexión clara con el resultado de aprendizaje.",
+        c2Bajo: "Archivo no pertinente, falta de coherencia en el análisis y selección del caso no justificada.",
+        c3Desc: "Acredita el estándar de calidad investigativa, dominio de fuentes primarias e integridad en la citación de expedientes y archivos."
+      },
+      {
+        id: "P4",
+        title: "P4. Informe académico descriptivo",
+        strategies: ["Aprendizaje basado en casos", "Aprendizaje basado en tareas", "Aprendizaje basado en escenarios", "Aprendizaje basado en proyectos"],
+        articulationText: "La información organizada en el informe descriptivo sirve de base para la comunicación oral y profundización reflexiva en:",
+        articulatedCodes: ["P1", "P2", "P3", "P7", "P8", "P9"],
+        structure: "• Título claro y conciso.\n• Introducción: Contextualización, objetivo y estructura.\n• Objetivos: Redacción precisa y coherente.\n• Procedimientos: Metodología descriptiva empleada.\n• Resultados: Presentación objetiva de datos y hallazgos sin juicios de valor subjetivos.\n• Conclusiones: Síntesis de la observación descriptiva.\n• Referencias bibliográficas.",
+        format: "• Documento en PDF o Word (.docx).\n• Redacción académica impersonal, lenguaje técnico preciso y estructurado según plantilla institucional.",
+        c1Desc: "Valora el cumplimiento de pautas de estilo, títulos, orden lógico, distinción de fuentes y referenciación.",
+        c1Alto: "Cumple rigurosamente con la estructura objetiva, citación oportuna y excelente sintaxis académica.",
+        c1Medio: "Presenta la estructura pero incluye leves sesgos de interpretación personal o errores menores de citación.",
+        c1Bajo: "Mezcla opinión personal sin evidencia, desorganización en el procedimiento y ausencia de referencias.",
+        c2Desc: "Evalúa la precisión en la descripción de hechos, pertinencia de antecedentes recopilados y rigurosidad de los datos.",
+        c2Alto: "Descripción exhaustiva y objetiva, datos completamente verificables e integración idónea de teorías.",
+        c2Medio: "Descripción aceptable pero omite variables clave o antecedentes relevantes del hecho o proceso.",
+        c2Bajo: "Datos insuficientes, imprecisión técnica y falta de rigor en la descripción del objeto de estudio.",
+        c3Desc: "Determina la calidad académica global, objetividad del escrito y respeto por los derechos de autor e integridad científica."
+      }
+    ];
+
+    let currentStrategy = "Todas las estrategias";
+    let selectedProductId = null;
+
+    // Inicialización
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+      initStrategySelect();
+      renderProductsList();
+    });
+
+    function initStrategySelect() {
+      const select = document.getElementById("strategy-select");
+      select.innerHTML = STRATEGIES.map(s => `<option value="${s}">${s}</option>`).join("");
+    }
+
+    function onStrategyChange() {
+      currentStrategy = document.getElementById("strategy-select").value;
+      renderProductsList();
+    }
+
+    function filterProducts() {
+      renderProductsList();
+    }
+
+    function renderProductsList() {
+      const query = document.getElementById("search-input").value.toLowerCase();
+      const container = document.getElementById("products-list");
+
+      const filtered = PRODUCTS.filter(p => {
+        const matchesStrategy = currentStrategy === "Todas las estrategias" || p.strategies.includes(currentStrategy);
+        const matchesSearch = p.title.toLowerCase().includes(query) || p.id.toLowerCase().includes(query);
+        return matchesStrategy && matchesSearch;
+      });
+
+      document.getElementById("product-count").innerText = `${filtered.length} disponibles`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<p class="text-xs text-slate-400 italic p-3 text-center">No se encontraron productos para esta búsqueda o estrategia.</p>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(p => {
+        const isSelected = p.id === selectedProductId;
+        const isDirect = currentStrategy === "Todas las estrategias" || p.strategies.includes(currentStrategy);
+
+        return `
+          <button onclick="selectProduct('${p.id}')" class="w-full text-left p-3 rounded-lg border transition-all flex flex-col gap-1 ${
+            isSelected 
+              ? 'bg-indigo-50 border-indigo-500 shadow-sm' 
+              : 'bg-slate-50 border-slate-200 hover:border-slate-300 hover:bg-slate-100'
+          }">
+            <div class="flex justify-between items-center">
+              <span class="font-mono text-xs font-bold ${isSelected ? 'text-indigo-700' : 'text-slate-700'}">${p.id}</span>
+              <span class="text-[10px] font-medium px-2 py-0.5 rounded ${isDirect ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                ${isDirect ? 'Directo' : 'Articulado'}
+              </span>
+            </div>
+            <span class="text-xs font-semibold text-slate-800 line-clamp-2">${p.title.replace(/^P\d+\.\s*/, '')}</span>
+          </button>
+        `;
+      }).join("");
+
+      lucide.createIcons();
+    }
+
+    function selectProduct(id) {
+      selectedProductId = id;
+      renderProductsList();
+      displayProductDetails(id);
+    }
+
+    function displayProductDetails(id) {
+      const p = PRODUCTS.find(item => item.id === id);
+      if (!p) return;
+
+      document.getElementById("empty-state").classList.add("hidden");
+      document.getElementById("product-detail").classList.remove("hidden");
+
+      document.getElementById("detail-code").innerText = p.id;
+      document.getElementById("detail-title").innerText = p.title;
+      document.getElementById("detail-strategy").innerHTML = `<i data-lucide="book-open" class="w-3.5 h-3.5"></i> Estrategia activa: <span class="text-slate-800 font-semibold">${currentStrategy}</span>`;
+      
+      const isDirect = currentStrategy === "Todas las estrategias" || p.strategies.includes(currentStrategy);
+      const badge = document.getElementById("detail-badge");
+      badge.innerText = isDirect ? "Producto Directo de la Estrategia" : "Producto de Articulación Sugerida";
+      badge.className = isDirect 
+        ? "px-2.5 py-0.5 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800"
+        : "px-2.5 py-0.5 text-xs font-semibold rounded-full bg-amber-100 text-amber-800";
+
+      // Articulación
+      document.getElementById("detail-articulation-text").innerText = p.articulationText;
+      const pillsContainer = document.getElementById("articulation-pills");
+      pillsContainer.innerHTML = p.articulatedCodes.map(code => {
+        const target = PRODUCTS.find(item => item.id === code);
+        const titleText = target ? target.title : code;
+        return `
+          <button onclick="selectProduct('${code}')" class="px-2.5 py-1 bg-white border border-amber-300 hover:border-indigo-500 hover:text-indigo-600 text-amber-900 rounded font-mono text-xs font-bold transition-colors flex items-center gap-1 shadow-sm" title="Consultar ${titleText}">
+            <i data-lucide="link" class="w-3 h-3 text-amber-600"></i> ${code}
+          </button>
+        `;
+      }).join("");
+
+      // Estructura y Formato
+      document.getElementById("detail-structure").innerText = p.structure;
+      document.getElementById("detail-format").innerText = p.format;
+
+      // Criterios
+      document.getElementById("c1-desc").innerText = p.c1Desc;
+      document.getElementById("c1-alto").innerText = p.c1Alto;
+      document.getElementById("c1-medio").innerText = p.c1Medio;
+      document.getElementById("c1-bajo").innerText = p.c1Bajo;
+
+      document.getElementById("c2-desc").innerText = p.c2Desc;
+      document.getElementById("c2-alto").innerText = p.c2Alto;
+      document.getElementById("c2-medio").innerText = p.c2Medio;
+      document.getElementById("c2-bajo").innerText = p.c2Bajo;
+
+      document.getElementById("c3-desc").innerText = p.c3Desc;
+
+      lucide.createIcons();
+    }
+
+    function copyContent() {
+      const p = PRODUCTS.find(item => item.id === selectedProductId);
+      if (!p) return;
+
+      const text = `FICHA EVALUIA - ${p.title}\n` +
+        `Estrategia: ${currentStrategy}\n\n` +
+        `ESTRUCTURA:\n${p.structure}\n\n` +
+        `FORMATO:\n${p.format}\n\n` +
+        `CRITERIO 1 (FORMA):\n${p.c1Desc}\nAlto: ${p.c1Alto}\n\n` +
+        `CRITERIO 2 (CONTENIDO):\n${p.c2Desc}\nAlto: ${p.c2Alto}`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Ficha de evaluación copiada al portapapeles con éxito.");
+      });
+    }
+  </script>
+</body>
+</html>
